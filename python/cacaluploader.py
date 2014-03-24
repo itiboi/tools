@@ -62,7 +62,6 @@ class CampusCalendarUploader(object):
         elif start_time is None or end_time is None:
             raise ValueError('Can not upload calendar with only one time period boundary')
 
-
     @property
     def start_time(self):
         return self._start_time
