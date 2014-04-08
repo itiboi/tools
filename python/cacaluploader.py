@@ -5,6 +5,7 @@ import requests
 import logging
 import caldav
 import icalendar
+import itertools
 from datetime import datetime, timedelta
 
 log = logging.getLogger(__name__)
@@ -181,18 +182,35 @@ class CampusCalendarUploader(object):
         :raise caldav.error.DeleteError: Raised if removing of already existing event failed.
         :raise caldav.error.PutError: Raised if upload of an event failed.
         """
-        # Remove all upcoming events
-        # TODO: Delete only deprecated events?
-        log.info('Delete all existing events in given time period')
+        # Filter events which where already uploaded
         old_events = upload_cal.date_search(self.start_time, self.end_time)
+        n = 0
+        for (new, old) in itertools.product(events, old_events):
+            if new['uid'] == old.instance.vevent.uid.value:
+                events.remove(new)
+                old_events.remove(old)
+                n += 1
+        if n > 0:
+            log.info('{n} event(s) where already uploaded'.format(n=n))
+
+        # Remove only deprecated events
         n = len(old_events)
+        if n > 0:
+            log.info('Delete {n} deprecated event(s) in given time period'.format(n=n))
+        else:
+            log.info('No deprecated event(s) found in calendar')
+
         for i, ev in enumerate(old_events):
             log.info('Delete event {index}/{num}'.format(index=i+1, num=n))
             ev.delete()
 
         # Upload all events
-        log.info('Upload all events')
         n = len(events)
+        if n > 0:
+            log.info('Upload all new events')
+        else:
+            log.info('No new events found')
+
         for i, ev in enumerate(events):
             log.info('Upload event {index}/{num}'.format(index=i+1, num=n))
             # Get iCal representation of event
