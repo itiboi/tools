@@ -183,6 +183,7 @@ class CampusCalendarUploader(object):
         :raise caldav.error.PutError: Raised if upload of an event failed.
         """
         # Filter events which where already uploaded
+        log.info('Fetch all existing events')
         old_events = upload_cal.date_search(self.start_time, self.end_time)
         n = 0
         for (new, old) in itertools.product(events, old_events):
@@ -218,6 +219,8 @@ class CampusCalendarUploader(object):
             event_cal.add_component(ev)
             # Add new event
             upload_cal.add_event(event_cal.to_ical())
+        
+        log.info('Uploaded all changes')
 
 
 if __name__ == '__main__':
