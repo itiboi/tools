@@ -15,3 +15,9 @@ CalDAV calendar of your choice. It loads everything from a config file and can s
 Requires requests, icalendar, caldav.
 
 Inspired by [Steffen Vogel's cocal script](https://github.com/stv0g/snippets/blob/master/php/campus/cocal.php).
+
+gitbackup (Shell)
+-----------------
+
+Small script to backup and restore existing git repositories in one file with all unnecessary overhead stripped out.
+Internally uses git bundle to backup.
