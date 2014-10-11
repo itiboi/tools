@@ -162,11 +162,11 @@ class CampusCalendarUploader(object):
         :raise caldav.error.NotFoundError: Raised if calendar could not be found.
         """
         # Connect to destination
+        log.info('Search for caldav calendar')
         client = caldav.DAVClient(self.calendar_url, username=self.calendar_user, password=self.calendar_pass)
         principal = caldav.Principal(client)
 
         # Search for given calendar
-        log.info('Search for caldav calendar')
         for c in principal.calendars():
             url = str(c.url)
             if url == self.calendar_url:
