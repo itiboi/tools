@@ -79,6 +79,7 @@ restore() {
     local backupPwd=$( pwd )
 
     echo "-- Creating empty repository with bundle as remote"
+    mkdir -p "$2"
     cd "$2"
     git init
     git remote add bundle "$1"
