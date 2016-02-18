@@ -152,7 +152,9 @@ case $1 in
     fi
 
     # Generate output file name
-    output=$( filename "$outputfolder" "${repName}.$(date +%Y%m%d).git-bundle" )
+    date=$(git -C "${gitRep}" log -1 --date=iso --pretty=format:%cd)
+    date=${date/ /-}
+    output=$( filename "$outputfolder" "${repName}.${date/ /}.git-bundle" )
 
     # Create bundle
     backup "$gitRep" "$output"
